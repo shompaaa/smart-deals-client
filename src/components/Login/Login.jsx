@@ -1,9 +1,25 @@
-import React from 'react';
-import { Link } from 'react-router';
+import React, { use } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Login = () => {
-    return (
-      <div className="card bg-base-100 w-full mx-auto mt-20 max-w-sm shrink-0 shadow-2xl">
+  const { signInWithGoogle } = use(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate(location?.state || "/");
+      })
+      .then((error) => {
+        console.log(error);
+      });
+  };
+
+  return (
+    <div className="card bg-base-100 w-full mx-auto mt-20 max-w-sm shrink-0 shadow-2xl">
       <h1 className="text-4xl text-center font-bold">Login Now</h1>
       <div className="card-body">
         <fieldset className="fieldset">
@@ -19,10 +35,15 @@ const Login = () => {
           <button className="btn btn-neutral mt-4">Login</button>
           <p className="text-center">
             Don't have an account? Please{" "}
-            <Link to='/register' className="text-blue-500 font-bold">Register</Link>
+            <Link to="/register" className="text-blue-500">
+              Register
+            </Link>
           </p>
           {/* Google */}
-          <button className="btn bg-white text-black border-[#e5e5e5]">
+          <button
+            onClick={handleGoogleSignIn}
+            className="btn bg-white text-black border-[#e5e5e5]"
+          >
             <svg
               aria-label="Google logo"
               width="16"
@@ -55,7 +76,7 @@ const Login = () => {
         </fieldset>
       </div>
     </div>
-    );
+  );
 };
 
 export default Login;

@@ -9,7 +9,24 @@ const Register = () => {
     const handleGoogleSignIn = ()=>{
         signInWithGoogle()
         .then(result =>{
-            console.log(result.user);
+            const newUser = {
+                name: result.user.displayName,
+                email: result.user.email,
+                photo: result.user.photoURL
+            }
+
+            //Create new user in database
+            fetch('http://localhost:3000/users',{
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(newUser)
+            })
+            .then(res =>res.json())
+            .then(data =>{
+                console.log('after save user',data);
+            })
         })
         .then(error =>{
             console.log(error);
@@ -41,7 +58,7 @@ const Register = () => {
           <button className="btn btn-neutral mt-4">Register</button>
           <p className="text-center">
             Already have an account? Please{" "}
-            <Link to='/login' className="text-blue-500 font-bold">Login</Link>
+            <Link to='/login' className="text-blue-500">Login</Link>
           </p>
           {/* Google */}
           <button
