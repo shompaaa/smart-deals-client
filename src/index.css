@@ -1,3 +1,14 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+
+.inter-font {
+  font-family: "Inter", sans-serif;
+}
+
+
+
+
 @import "tailwindcss";
 @plugin "daisyui" {
   themes:
@@ -6,6 +17,17 @@
 @plugin "daisyui/theme" {
   name: "light";
   default: true;
-  --color-primary: purple;
+  --color-primary: #632EE3;
   --color-secondary: teal;
+}
+
+/* Custom Button Override */
+.btn-primary {
+  @apply bg-gradient-to-r from-[#632EE3] to-[#9F62F2] border-none text-white
+}
+.btn-primary:hover{
+  @apply opacity-90
+}
+.btn-secondary{
+  @apply bg-transparent outline border-0 shadow-none text-[#632EE3]
 }

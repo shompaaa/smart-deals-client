@@ -1,5 +1,5 @@
 import React, { use } from "react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
@@ -59,9 +59,9 @@ const Navbar = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl gap-0">
-          Smart<span>Deals</span>
-        </a>
+        <Link to='/' className="btn btn-ghost text-xl gap-0">
+          Smart<span className="text-primary">Deals</span>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
@@ -71,18 +71,18 @@ const Navbar = () => {
           ""
         ) : (
           <div className="">
-            <NavLink to="/register" className="btn">
+            <NavLink to="/register" className="btn btn-primary">
               Register
             </NavLink>
           </div>
         )}
         <div className="">
           {user ? (
-            <NavLink onClick={handleSignOutUser} to="/" className="btn">
+            <NavLink onClick={handleSignOutUser} to="/" className="btn btn-primary">
               Logout
             </NavLink>
           ) : (
-            <NavLink to="/login" className="btn">
+            <NavLink to="/login" className="btn btn-secondary">
               Login
             </NavLink>
           )}
