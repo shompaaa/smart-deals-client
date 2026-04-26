@@ -19,7 +19,7 @@ const Login = () => {
   };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto mt-20 max-w-sm shrink-0 shadow-2xl">
+    <div className="card bg-base-100 w-full mx-auto mt-10 mb-10 max-w-sm shrink-0 shadow-2xl">
       <h1 className="text-4xl text-center font-bold">Login Now</h1>
       <div className="card-body">
         <fieldset className="fieldset">

@@ -1,41 +1,42 @@
 import React, { use } from "react";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 
 const Register = () => {
+  const { signInWithGoogle } = use(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    const {signInWithGoogle} = use(AuthContext)
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          photo: result.user.photoURL,
+        };
+        navigate(location?.state || "/");
 
-    const handleGoogleSignIn = ()=>{
-        signInWithGoogle()
-        .then(result =>{
-            const newUser = {
-                name: result.user.displayName,
-                email: result.user.email,
-                photo: result.user.photoURL
-            }
-
-            //Create new user in database
-            fetch('http://localhost:3000/users',{
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(newUser)
-            })
-            .then(res =>res.json())
-            .then(data =>{
-                console.log('after save user',data);
-            })
+        //Create new user in database
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
         })
-        .then(error =>{
-            console.log(error);
-        })
-    }
-
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("after save user", data);
+          });
+      })
+      .then((error) => {
+        console.log(error);
+      });
+  };
 
   return (
-    <div className="card bg-base-100 w-full mx-auto mt-10 max-w-sm shrink-0 shadow-2xl">
+    <div className="card bg-base-100 w-full mx-auto mt-10 mb-10 max-w-sm shrink-0 shadow-2xl ">
       <h1 className="text-4xl text-center font-bold">Register Now</h1>
       <div className="card-body">
         <fieldset className="fieldset">
@@ -58,12 +59,15 @@ const Register = () => {
           <button className="btn btn-neutral mt-4">Register</button>
           <p className="text-center">
             Already have an account? Please{" "}
-            <Link to='/login' className="text-blue-500">Login</Link>
+            <Link to="/login" className="text-blue-500">
+              Login
+            </Link>
           </p>
           {/* Google */}
           <button
-          onClick={handleGoogleSignIn}
-           className="btn bg-white text-black border-[#e5e5e5]">
+            onClick={handleGoogleSignIn}
+            className="btn bg-white text-black border-[#e5e5e5]"
+          >
             <svg
               aria-label="Google logo"
               width="16"

@@ -7,7 +7,7 @@ const ErrorPage = () => {
     return (
         <div>
             <Navbar></Navbar>
-            <img src={errorImage} className='h-[calc(100vh-286px)] w-auto mx-auto' alt="Error 404" />
+            <img src={errorImage} className='h-[calc(100vh-285px)] w-auto mx-auto' alt="Error 404" />
             <Footer></Footer>
         </div>
     );

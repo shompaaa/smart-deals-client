@@ -63,7 +63,7 @@ const Hero = () => {
         {/* Buttons */}
         <div className="space-x-3">
           <button className="btn btn-primary">Watch All Products</button>
-          <button className="btn btn-outline btn-secondary">
+          <button className="btn outline-[#632EE3] btn-secondary">
             Post An Product
           </button>
         </div>
