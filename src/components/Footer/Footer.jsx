@@ -1,11 +1,14 @@
 import React from "react";
+import { BiBold } from "react-icons/bi";
+import { CiLocationOn, CiMail, CiPhone } from "react-icons/ci";
+import { FaFacebook, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { Link } from "react-router";
 
 const Footer = () => {
   return (
     <footer className="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 px-20">
       <aside className="max-w-xs">
-        <Link to="/" className="text-xl">
+        <Link to="/" className="text-xl font-bold">
           Smart<span className="text-primary">Deals</span>
         </Link>
         <p>
@@ -45,12 +48,26 @@ const Footer = () => {
       </nav>
       <nav>
         <h6 className="footer-title">Contact & Support</h6>
-        <p>support@smart-deals.com</p>
-        <p>+88012345678</p>
-        <p>123 Commerce Street, Dhaka, Bangladesh</p>
+        <div className="flex justify-center items-center gap-1">
+          <CiMail size={17} />
+          <p>support@smart-deals.com</p>
+        </div>
+        <div className="flex justify-center items-center gap-1">
+          <CiPhone size={17} />
+          <p>+88012345678</p>
+        </div>
+        <div className="flex justify-center items-center gap-1">
+          <CiLocationOn size={17} />
+          <p>123 Commerce Street, Dhaka, Bangladesh</p>
+        </div>
       </nav>
       <nav>
         <h6 className="footer-title">Social Links</h6>
+        <div className="flex gap-4">
+          <FaXTwitter size={20} />
+          <FaLinkedin size={20} />
+          <FaFacebook size={20} />
+        </div>
       </nav>
     </footer>
   );
