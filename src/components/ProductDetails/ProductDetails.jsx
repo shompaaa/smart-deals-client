@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useRef } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link, useLoaderData } from "react-router";
 
 const ProductDetails = () => {
   const product = useLoaderData();
+  const bidModalRef = useRef(null);
+
+  const handleBidModalOpen = () => {
+    bidModalRef.current.showModal();
+  };
+
+  const handleBidSubmit = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    console.log(name, email);
+    e.target.reset()
+  };
   const {
     _id,
     title,
@@ -24,10 +37,10 @@ const ProductDetails = () => {
   } = product;
   return (
     <div className="p-20 bg-[#F5F5F5]">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Side Content */}
         <div className="left-content">
-          <img src={image} className="h-120 w-full mb-7 rounded-xl" alt="" />
+          <img src={image} className="h-100 w-full mb-7 rounded-xl" alt="" />
           <div className="product description bg-white p-6 rounded-xl">
             <p className="text-2xl font-bold my-6">Product Description</p>
             <div className="flex justify-between">
@@ -47,21 +60,30 @@ const ProductDetails = () => {
         {/* Right Side Content */}
         <div className="right-content space-y-6">
           <div>
-            <Link to="/allProducts" className="flex gap-1 items-center">
+            <Link to="/" className="flex gap-1 items-center">
               <FaArrowLeft />
               <p>Back To Products</p>
             </Link>
             <h2 className="text-4xl my-4 font-bold">{title}</h2>
-            <small className="badge bg-purple-100 text-primary">{category}</small>
+            <small className="badge bg-purple-100 text-primary">
+              {category}
+            </small>
           </div>
           <div className="price bg-white p-6 rounded-xl">
-            <p className="text-xl text-green-500 font-bold">${price_min}-{price_max}</p>
+            <p className="text-xl text-green-500 font-bold">
+              ${price_min}-{price_max}
+            </p>
             <p>Price starts from</p>
           </div>
           <div className="details bg-white p-6 rounded-xl">
             <h4 className="text-2xl font-semibold mb-4">Product Details</h4>
-            <p><span className="font-semibold">Product Id:</span> {_id}</p>
-            <p><span className="font-semibold">Posted: </span>{created_at.slice(0,10)}</p>
+            <p>
+              <span className="font-semibold">Product Id:</span> {_id}
+            </p>
+            <p>
+              <span className="font-semibold">Posted: </span>
+              {created_at.slice(0, 10)}
+            </p>
           </div>
           <div className="seller-info bg-white p-6 rounded-xl">
             <div className="flex gap-2 items-center mb-3">
@@ -73,15 +95,77 @@ const ProductDetails = () => {
                 <p>{email}</p>
               </div>
             </div>
-           <div className="space-y-2">
-             <p><span className="font-bold">Location:</span> {location}</p>
-            <p><span className="font-bold">Contact:</span> {seller_contact}</p>
-            <p><span className="font-bold">Status:</span> <span className="badge bg-amber-400/55">{status}</span></p>
-           </div>
+            <div className="space-y-2">
+              <p>
+                <span className="font-bold">Location:</span> {location}
+              </p>
+              <p>
+                <span className="font-bold">Contact:</span> {seller_contact}
+              </p>
+              <p>
+                <span className="font-bold">Status:</span>{" "}
+                <span className="badge bg-amber-400/55">{status}</span>
+              </p>
+            </div>
           </div>
           <div>
-            <button className="btn btn-primary w-full">I Want Buy This Product</button>
+            <button
+              onClick={handleBidModalOpen}
+              className="btn btn-primary w-full"
+            >
+              I Want Buy This Product
+            </button>
           </div>
+          <dialog
+            ref={bidModalRef}
+            className="modal modal-bottom sm:modal-middle"
+          >
+            <div className="modal-box">
+              <h3 className="font-bold text-lg text-center">
+                Give Seller Your Offered Price!
+              </h3>
+              <form action="" onSubmit={handleBidSubmit}>
+                <fieldset className="fieldset">
+                  <label className="label">Buyer Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    className="input"
+                    placeholder="Buyer Name"
+                  />
+                  <label className="label">Buyer Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    className="input"
+                    placeholder="Buyer Email"
+                  />
+                  <label className="label">Place Your Price</label>
+                  <input
+                    type="text"
+                    name="price"
+                    className="input"
+                    placeholder="Your Bid here"
+                  />
+                </fieldset>
+                {/* Buttons INSIDE same form */}
+                <div className="modal-action">
+                  <button
+                    type="button"
+                    className="btn"
+                    onClick={() => bidModalRef.current.close()}
+                  >
+                    Cancel
+                  </button>
+
+                  <button type="submit" className="btn btn-primary ml-2">
+                    Submit Bid
+                  </button>
+                </div>
+              </form>
+
+            </div>
+          </dialog>
         </div>
       </div>
     </div>
