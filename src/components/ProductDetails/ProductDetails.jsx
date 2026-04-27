@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 
 const ProductDetails = () => {
   const product = useLoaderData();
-  const [bids,setBids] = useState([])
+  const [bids, setBids] = useState([]);
   const bidModalRef = useRef(null);
   const { user } = use(AuthContext);
   const {
@@ -32,7 +32,7 @@ const ProductDetails = () => {
     fetch(`http://localhost:3000/products/bids/${productId}`)
       .then((res) => res.json())
       .then((data) => {
-        setBids(data)
+        setBids(data);
       });
   }, [productId]);
 
@@ -51,6 +51,7 @@ const ProductDetails = () => {
       product: productId,
       buyer_name: name,
       buyer_email: email,
+      buyer_image: user?.photoURL,
       bid_price: bid,
       status: "pending",
     };
@@ -73,13 +74,17 @@ const ProductDetails = () => {
             showConfirmButton: false,
             timer: 1500,
           });
+          newBid._id = data.insertedId
+          const newBids = [...bids, newBid]
+          newBids.sort((a,b)=>b.bid_price-a.bid_price)
+          setBids(newBids)
         }
       });
   };
 
   return (
     <div className="p-20 bg-[#F5F5F5]">
-        {/* Products Details */}
+      {/* Products Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Side Content */}
         <div className="left-content">
@@ -213,10 +218,58 @@ const ProductDetails = () => {
           </dialog>
         </div>
       </div>
-    {/* Bids for this product */}
-    <div className="mt-20">
-    <h2 className="text-4xl font-bold"> Bids For This Products: <span className="text-primary">{bids.length}</span></h2>
-    </div>
+      {/* Bids for this product */}
+      <div className="mt-20 mb-5">
+        <h2 className="text-4xl font-bold">
+          {" "}
+          Bids For This Products:{" "}
+          <span className="text-primary">{bids.length}</span>
+        </h2>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>SL No.</th>
+              <th>Buyer Name</th>
+              <th>Buyer Email</th>
+              <th>Bid Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* row 1 */}
+            {bids.map((bid,index) => (
+              <tr>
+              <th>{index+1}</th>
+                <td>
+                  <div className="flex items-center gap-3">
+                    <div className="avatar">
+                      <div className="mask mask-squircle h-12 w-12">
+                        <img
+                          src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                          alt="Avatar Tailwind CSS Component"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div className="font-bold">{bid.buyer_name}</div>
+                    </div>
+                  </div>
+                </td>
+                <td>
+                {bid.buyer_email}
+                </td>
+                <td>${bid.bid_price}</td>
+                <th>
+                  <button className="btn btn-ghost btn-xs">details</button>
+                </th>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
