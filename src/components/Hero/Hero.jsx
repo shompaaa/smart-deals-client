@@ -1,6 +1,7 @@
 import React from "react";
 import bgHeroLeft from "../../assets/bg-hero-left.png";
 import bgHeroRight from "../../assets/bg-hero-right.png";
+import { Link } from "react-router";
 
 const Hero = () => {
   return (
@@ -62,7 +63,7 @@ const Hero = () => {
 
         {/* Buttons */}
         <div className="space-x-3">
-          <button className="btn btn-primary">Watch All Products</button>
+          <Link to='/allProducts' className="btn btn-primary">Watch All Products</Link>
           <button className="btn outline-[#632EE3] btn-secondary">
             Post An Product
           </button>
