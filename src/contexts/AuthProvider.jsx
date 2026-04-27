@@ -10,9 +10,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../Firebase/firebase.init";
 
-
-const googleProvider = new GoogleAuthProvider()
-
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -31,15 +29,16 @@ const AuthProvider = ({ children }) => {
   };
 
   //User Login with Google
-  const signInWithGoogle = ()=>{
-    return signInWithPopup(auth,googleProvider);
-  }
+  const signInWithGoogle = () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
 
-//User Observer
+  //User Observer
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false)
+      setLoading(false);
     });
     return () => {
       unsubscribe();
@@ -47,10 +46,10 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   //User Sign Out
-  const signOutUser = ()=>{
-    setLoading(true)
-    return signOut(auth)
-  }
+  const signOutUser = () => {
+    setLoading(true);
+    return signOut(auth);
+  };
 
   const authInfo = {
     createUser,

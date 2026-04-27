@@ -1,24 +1,16 @@
-import React, { useRef } from "react";
+import React, { use, useEffect, useRef, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 import { Link, useLoaderData } from "react-router";
+import { AuthContext } from "../../contexts/AuthContext";
+import Swal from "sweetalert2";
 
 const ProductDetails = () => {
   const product = useLoaderData();
+  const [bids,setBids] = useState([])
   const bidModalRef = useRef(null);
-
-  const handleBidModalOpen = () => {
-    bidModalRef.current.showModal();
-  };
-
-  const handleBidSubmit = (e) => {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    console.log(name, email);
-    e.target.reset()
-  };
+  const { user } = use(AuthContext);
   const {
-    _id,
+    _id: productId,
     title,
     category,
     image,
@@ -35,8 +27,59 @@ const ProductDetails = () => {
     seller_contact,
     status,
   } = product;
+
+  useEffect(() => {
+    fetch(`http://localhost:3000/products/bids/${productId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBids(data)
+      });
+  }, [productId]);
+
+  const handleBidModalOpen = () => {
+    bidModalRef.current.showModal();
+  };
+
+  const handleBidSubmit = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const bid = e.target.bid.value;
+    console.log(name, email, bid);
+    e.target.reset();
+    const newBid = {
+      product: productId,
+      buyer_name: name,
+      buyer_email: email,
+      bid_price: bid,
+      status: "pending",
+    };
+
+    fetch("http://localhost:3000/bids", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newBid),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.insertedId) {
+          bidModalRef.current.close();
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your bid has been placed",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+  };
+
   return (
     <div className="p-20 bg-[#F5F5F5]">
+        {/* Products Details */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Side Content */}
         <div className="left-content">
@@ -78,7 +121,7 @@ const ProductDetails = () => {
           <div className="details bg-white p-6 rounded-xl">
             <h4 className="text-2xl font-semibold mb-4">Product Details</h4>
             <p>
-              <span className="font-semibold">Product Id:</span> {_id}
+              <span className="font-semibold">Product Id:</span> {productId}
             </p>
             <p>
               <span className="font-semibold">Posted: </span>
@@ -126,24 +169,27 @@ const ProductDetails = () => {
               </h3>
               <form action="" onSubmit={handleBidSubmit}>
                 <fieldset className="fieldset">
+                  {/* Name Field */}
                   <label className="label">Buyer Name</label>
                   <input
                     type="text"
                     name="name"
                     className="input"
-                    placeholder="Buyer Name"
+                    defaultValue={user?.displayName}
                   />
+                  {/* Email Field */}
                   <label className="label">Buyer Email</label>
                   <input
                     type="email"
                     name="email"
                     className="input"
-                    placeholder="Buyer Email"
+                    defaultValue={user?.email}
                   />
-                  <label className="label">Place Your Price</label>
+                  {/* Bid Field */}
+                  <label className="label">Place Your Bid</label>
                   <input
                     type="text"
-                    name="price"
+                    name="bid"
                     className="input"
                     placeholder="Your Bid here"
                   />
@@ -163,11 +209,14 @@ const ProductDetails = () => {
                   </button>
                 </div>
               </form>
-
             </div>
           </dialog>
         </div>
       </div>
+    {/* Bids for this product */}
+    <div className="mt-20">
+    <h2 className="text-4xl font-bold"> Bids For This Products: <span className="text-primary">{bids.length}</span></h2>
+    </div>
     </div>
   );
 };
