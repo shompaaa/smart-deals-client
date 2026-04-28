@@ -242,7 +242,7 @@ const ProductDetails = () => {
             {/* row 1 */}
             {bids.map((bid,index) => (
               <tr>
-              <th>{index+1}</th>
+              <td>{index+1}</td>
                 <td>
                   <div className="flex items-center gap-3">
                     <div className="avatar">
@@ -263,7 +263,7 @@ const ProductDetails = () => {
                 </td>
                 <td>${bid.bid_price}</td>
                 <th>
-                  <button className="btn btn-ghost btn-xs">details</button>
+                  <p className="badge bg-orange-200 text-secondary">{bid.status}</p>
                 </th>
               </tr>
             ))}
